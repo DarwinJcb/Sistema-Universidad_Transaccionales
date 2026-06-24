@@ -4,6 +4,10 @@ import {
   CrearPeticion1Dto,
   RespuestaPeticion1,
 } from './dto/crear-peticion-1.dto';
+import {
+  CrearPeticion2Dto,
+  RespuestaPeticion2,
+} from './dto/crear-peticion-2.dto';
 import { UniversidadRepository } from './universidad.repository';
 
 @Injectable()
@@ -18,6 +22,19 @@ export class UniversidadService {
     return await this.universidadRepository.crearCarreraConMaterias({
       Carrera,
       Materias,
+    });
+  }
+
+  async crearPeticion2(
+    datosPeticion: CrearPeticion2Dto,
+  ): Promise<RespuestaPeticion2> {
+    const { Ciclo, Carrera, Estudiantes, Matricula } = datosPeticion;
+
+    return await this.universidadRepository.crearCicloEstudiantesMatriculas({
+      Ciclo,
+      Carrera,
+      Estudiantes,
+      Matricula,
     });
   }
 }
