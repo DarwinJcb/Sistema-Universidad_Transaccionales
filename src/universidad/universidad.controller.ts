@@ -2,4 +2,4 @@
 import { Controller } from '@nestjs/common';
 
 @Controller('universidad')
-export class UniversidadController { }
+export class UniversidadController {}
