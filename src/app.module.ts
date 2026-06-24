@@ -12,4 +12,4 @@ import { UniversidadController } from './universidad/universidad.controller';
   controllers: [AppController, UniversidadController],
   providers: [AppService, PrismaService, UniversidadService],
 })
-export class AppModule { }
+export class AppModule {}
