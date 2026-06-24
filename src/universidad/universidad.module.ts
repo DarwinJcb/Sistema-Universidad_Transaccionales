@@ -1,12 +1,11 @@
 /* src/universidad/universidad.module.ts: */
 import { Module } from '@nestjs/common';
-import { UniversidadController } from './universidad.controller';
-import { UniversidadRepository } from './universidad.repository';
-import { UniversidadService } from './universidad.service';
 import { PrismaService } from '../prisma/prisma.service';
+import { UniversidadController } from './universidad.controller';
+import { UniversidadService } from './universidad.service';
 
 @Module({
   controllers: [UniversidadController],
-  providers: [UniversidadService, UniversidadRepository, PrismaService],
+  providers: [UniversidadService, PrismaService],
 })
 export class UniversidadModule {}

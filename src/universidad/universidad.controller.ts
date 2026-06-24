@@ -34,6 +34,11 @@ export class UniversidadController {
     });
   }
 
+  @Get('peticion-1')
+  async consultarPeticion1(): Promise<RespuestaCarrerasConMaterias> {
+    return await this.universidadService.consultarCarrerasConMaterias();
+  }
+
   @Post('peticion-2')
   async crearPeticion2(
     @Body() datosPeticion: CrearPeticion2Dto,
@@ -46,6 +51,11 @@ export class UniversidadController {
       Estudiantes,
       Matricula,
     });
+  }
+
+  @Get('peticion-2')
+  async consultarPeticion2(): Promise<RespuestaMatriculasActivas> {
+    return await this.universidadService.consultarMatriculasActivas();
   }
 
   @Post('peticion-3')
