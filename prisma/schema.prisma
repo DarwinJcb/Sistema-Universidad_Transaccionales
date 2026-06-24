@@ -10,3 +10,108 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+enum EstadoMatricula {
+  ACTIVA
+  INACTIVA
+  ANULADA
+}
+
+model Carrera {
+  IdCarrera     Int         @id @default(autoincrement())
+  NombreCarrera String      @unique
+  Activo        Boolean     @default(true)
+  FechaCreacion DateTime    @default(now())
+  Materias      Materia[]
+  Matriculas    Matricula[]
+}
+
+model Materia {
+  IdMateria               Int                     @id @default(autoincrement())
+  NombreMateria           String
+  Activo                  Boolean                 @default(true)
+  FechaCreacion           DateTime                @default(now())
+  CarreraFK               Int
+  Carrera                 Carrera                 @relation(fields: [CarreraFK], references: [IdCarrera])
+  Matriculas              Matricula[]
+  AsignacionesLaboratorio AsignacionLaboratorio[]
+
+  @@unique([NombreMateria, CarreraFK])
+}
+
+model Ciclo {
+  IdCiclo                 Int                     @id @default(autoincrement())
+  NombreCiclo             String                  @unique
+  Activo                  Boolean                 @default(true)
+  FechaInicio             DateTime?
+  FechaFin                DateTime?
+  Matriculas              Matricula[]
+  AsignacionesLaboratorio AsignacionLaboratorio[]
+}
+
+model Estudiante {
+  IdEstudiante       Int         @id @default(autoincrement())
+  NombreEstudiante   String
+  ApellidoEstudiante String
+  CedulaEstudiante   String      @unique
+  CorreoEstudiante   String      @unique
+  Activo             Boolean     @default(true)
+  Matriculas         Matricula[]
+}
+
+model Matricula {
+  IdMatricula       Int               @id @default(autoincrement())
+  EstadoMatricula   EstadoMatricula   @default(ACTIVA)
+  FechaMatricula    DateTime          @default(now())
+  EstudianteFK      Int
+  CarreraFK         Int
+  MateriaFK         Int
+  CicloFK           Int
+  Estudiante        Estudiante        @relation(fields: [EstudianteFK], references: [IdEstudiante])
+  Carrera           Carrera           @relation(fields: [CarreraFK], references: [IdCarrera])
+  Materia           Materia           @relation(fields: [MateriaFK], references: [IdMateria])
+  Ciclo             Ciclo             @relation(fields: [CicloFK], references: [IdCiclo])
+  AsignacionesLugar AsignacionLugar[]
+
+  @@unique([EstudianteFK, MateriaFK, CicloFK])
+}
+
+model Lugar {
+  IdLugar           Int               @id @default(autoincrement())
+  NombreLugar       String            @unique
+  Capacidad         Int
+  Activo            Boolean           @default(true)
+  AsignacionesLugar AsignacionLugar[]
+}
+
+model AsignacionLugar {
+  IdAsignacionLugar Int       @id @default(autoincrement())
+  FechaAsignacion   DateTime  @default(now())
+  MatriculaFK       Int
+  LugarFK           Int
+  Matricula         Matricula @relation(fields: [MatriculaFK], references: [IdMatricula])
+  Lugar             Lugar     @relation(fields: [LugarFK], references: [IdLugar])
+
+  @@unique([MatriculaFK, LugarFK])
+}
+
+model Laboratorio {
+  IdLaboratorio           Int                     @id @default(autoincrement())
+  NombreLaboratorio       String                  @unique
+  Capacidad               Int
+  Activo                  Boolean                 @default(true)
+  AsignacionesLaboratorio AsignacionLaboratorio[]
+}
+
+model AsignacionLaboratorio {
+  IdAsignacionLaboratorio Int         @id @default(autoincrement())
+  FechaAsignacion         DateTime    @default(now())
+  LaboratorioFK           Int
+  MateriaFK               Int
+  CicloFK                 Int
+  Laboratorio             Laboratorio @relation(fields: [LaboratorioFK], references: [IdLaboratorio])
+  Materia                 Materia     @relation(fields: [MateriaFK], references: [IdMateria])
+  Ciclo                   Ciclo       @relation(fields: [CicloFK], references: [IdCiclo])
+
+  @@unique([LaboratorioFK, MateriaFK, CicloFK])
+}
