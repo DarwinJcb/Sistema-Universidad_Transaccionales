@@ -1,2 +1,8 @@
 /* src/universidad/universidad.repository.ts: */
-export class UniversidadRepository { }
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+
+@Injectable()
+export class UniversidadRepository {
+    constructor(private readonly prisma: PrismaService) { }
+}
